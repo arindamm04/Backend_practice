@@ -1,6 +1,10 @@
 import {v2 as cloudinary} from "cloudinary"
 import fs from "fs"
 
+//This utility function handles file uploads. 
+// Its job is to take a file that has been temporarily saved onto your local server (like an image or video uploaded by a user) 
+// and move it safely up to Cloudinary (a cloud storage service for media).
+
 
 
 cloudinary.config({ 
@@ -13,6 +17,9 @@ cloudinary.config({
 const uploadCloudinary = async (localFilePath) => {
     try {
         if (!localFilePath) return null
+        //localFilePath: The exact location of the file sitting on your server's local storage
+        //if (!localFilePath) return null: A quick safety check. 
+        // If no file path is provided, the function stops immediately and returns null.
         const response = await cloudinary.uploader.upload(localFilePath, {resource_type: "auto"})
         console.log("file is uploaded on cloudinary", 
         response.url);
@@ -22,5 +29,16 @@ const uploadCloudinary = async (localFilePath) => {
         return null;
     }
 }
+
+/*await cloudinary.uploader.upload(...): This sends the file over the internet to Cloudinary. 
+Because it takes time, it uses await.
+{ resource_type: "auto" }: This setting tells Cloudinary to automatically figure out what kind of file it is—whether 
+it's an image, a video, or raw audio—so you don't have to hardcode validation rules.
+response.url: Once uploaded, Cloudinary responds with a public, 
+secure web URL link to that file (which you usually save to your database so you can display it to users later).
+fs.unlinkSync(localFilePath): If the upload to Cloudinary fails for any reason 
+(e.g., bad internet connection, wrong API keys), your server is still stuck holding that temporary file on its hard drive.
+fs.unlinkSync deletes the local file immediately.
+*/
 
 export {uploadCloudinary}

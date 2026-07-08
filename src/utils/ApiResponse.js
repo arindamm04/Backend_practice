@@ -6,3 +6,5 @@ class ApiResponse {
         this.success = statusCode < 400
     }
 }
+
+//this code is used to format successful HTTP responses in a neat, standardized way.

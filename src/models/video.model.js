@@ -42,3 +42,11 @@ const videoSchema = new Schema(
 
 videoSchema.plugin(mongooseAggregatePaginate)
 export const Video = mongoose.model("Video", videoSchema)
+
+/*Why an Aggregate Paginate Plugin?
+In advanced applications, you don't just fetch plain videos; you run complex data queries called Aggregation Pipelines. 
+For example, you might want to:
+Filter out videos that are private (isPublished: false).
+Join the User collection to get the owner's profile picture and channel name.
+Sort them by the highest number of views or newest upload date.
+Mongoose's built-in pagination cannot handle these complex pipelines easily*/

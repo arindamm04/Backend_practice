@@ -1,5 +1,5 @@
 import mongoose, {Schema} from "mongoose";
-import  JsonWebTokenError from "jsonwebtoken";
+import  jwt from "jwt";
 import bcrypt from "bcrypt";
 
 const userSchema = new Schema({
@@ -53,7 +53,7 @@ const userSchema = new Schema({
 userSchema.pre("save",async function (next) {
     if(!this.isModified("password")) return next();
 
-    this.password = bcrypt.hash(this.password, 10)
+    this.password = await bcrypt.hash(this.password, 10)
     next()
 })
 
@@ -72,7 +72,7 @@ userSchema.methods.generateAccessToken = function(){
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
-            expiresIN: process.env.ACCESS_TOKEN_EXPIRY
+            expiresIn: process.env.ACCESS_TOKEN_EXPIRY
         }
     )
 }
@@ -84,7 +84,7 @@ userSchema.methods.generateRefreshToken = function(){
         },
         process.env.REFRESH_TOKEN_SECRET,
         {
-            expiresIN: process.env.REFRESH_TOKEN_EXPIRY
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRY
         }
     )
 }
@@ -93,3 +93,23 @@ userSchema.methods.generateRefreshToken = function(){
 
 
 export const User = mongoose.model("User", userSchema)
+
+/*pre("save", ...): This is a Mongoose "hook". It intercepts the data right before it gets written to MongoDB.
+
+this.isModified("password"): If a user updates their avatar but doesn't change their password,
+we don't want to encrypt an already encrypted password. 
+This line skips encryption unless the password field is actually modified.
+
+bcrypt.hash(...): Uses the bcrypt library to turn a password like "mysecret123" into an unreadable,
+random sequence of characters (a hash).
+*/
+
+//JWT tokens
+/*These methods generate JSON Web Tokens (JWT) for keeping users securely logged in.
+Access Token: A short-lived credential containing user data (_id, email, username).
+The frontend sends this token along with every request to verify who the user is.
+
+Refresh Token: A long-lived credential containing only the user's _id. 
+It is stored safely on the server or a secure cookie to generate new access tokens 
+without forcing the user to re-enter their password constantly.
+*/
