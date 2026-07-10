@@ -7,4 +7,6 @@ class ApiResponse {
     }
 }
 
+export {ApiResponse}
+
 //this code is used to format successful HTTP responses in a neat, standardized way.

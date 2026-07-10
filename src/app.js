@@ -20,8 +20,8 @@ app.use(cors({
 //app.use :- use this middleware for every request. whenever someone calls your API,Express will first run this middleware.
 // credentials: true :- this allows cookies, Authorization headers, sessions to be sent from the frontend.
 
-app.use(express.json({limit: "16kb"}))
-app.use(express.urlencoded({extended: true, limit: "16kb"}))
+app.use(express.json({limit: "8mb"}))
+app.use(express.urlencoded({extended: true, limit: "8mb"}))
 app.use(express.static("public"))
 
 //Only accept JSON data up to 16kb.

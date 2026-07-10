@@ -2,15 +2,37 @@ import multer from "multer";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-    cb(null, '/tmp/my-uploads')
+        cb(null, "./public")
     },
     filename: function (req, file, cb) {
     
-    cb(null, file.originalname)
+        cb(null, file.originalname)
     }
 })
 
-export const upload = multer({storage: storage})
+export const upload = multer({ 
+    storage, 
+})
+
+
+
+
+//import path from "path"
+//import { fileURLToPath } from "url";
+
+//const __filename = fileURLToPath(import.meta.url)
+//const __dirname = path.dirname(__filename)
+
+
+/*const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.join(__dirname, "../../public/temp"))
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+})*/
+
 
 /*Multer offers two types of storage: MemoryStorage (keeping files temporarily in RAM as buffer data) and DiskStorage. 
 Your code uses diskStorage, which tells Multer to write the incoming file directly onto your server's hard drive.
