@@ -21,7 +21,8 @@ const uploadOnCloudinary = async (localFilePath) => {
         fs.unlinkSync(localFilePath)
         return {
             url: response.secure_url,
-            public_id: response.public_id
+            public_id: response.public_id,
+            duration: response.duration
         };
 
     } catch (error) {
